@@ -1,0 +1,202 @@
+{% extends 'company/base.html' %}
+
+{% block content %}
+    <!-- style属性 -->
+    <style>
+        .fixed-width {
+            width: 150px;  /* 幅を100ピクセルに固定 */
+        }
+        .fixed-height {
+            height: 50px;  /* 高さを50ピクセルに固定 */
+        }
+
+        .font-size-fami {
+            font-size: 20px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+    
+
+<div class="back-color">
+{% if company.会社ロゴ %}
+<div class="d-flex justify-content-center align-items-center">
+    <img src="{{ company.会社ロゴ.url }}" alt="" class="col-md-2 mb-3">
+</div>
+{% endif %}
+</div>
+
+<div class="d-flex justify-content-center align-items-center">
+    <div class="card w-50 mb-5"> <!-- ここで幅を設定 -->
+        <div class="text-center new_fonts card-header" 
+        style="font-size: 30px;"><b>{{company.会社名}}</b></div>
+    </div>
+</div>
+
+<br>
+<div class="d-flex justify-content-center align-items-center" style="height: 20vh;">
+    <div class="mb-5 w-50">
+        <label for="" class="form-label font-type font-size-fami">事業内容</label>
+        <textarea class="form-control" style="font-size: 20px;" readonly>{{company.事業内容}}</textarea>
+       
+    </div>
+</div>
+
+
+
+
+    <!-- テーブル（成長性指標） -->
+<br>
+    <div class="d-flex justify-content-center align-items-center" style="height: 20vh;">
+        <div class="mb-5 w-50">
+            <label for="" class="form-label font-type font-size-fami">成長性指標</label>
+            
+            <!-- テーブル -->
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th scope="col" class="fixed-width ">売上高３年平均</th>
+                        <th scope="col" class="fixed-width">営業益３年平均</th>
+                        <th scope="col" class="fixed-width">ROE</th>
+                        <th scope="col" class="fixed-width">営業利益率</th>
+                        <th scope="col" class="fixed-width">一人当たりの売上高</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="fixed-height">{{company.売上高}}%</td>
+                        <td class="fixed-height">{{company.営業利益}}%</td>
+                        <td class="fixed-height">{{company.roe}}%</td>
+                        <td class="fixed-height">{{company.営業利益率}}%</td>
+                        <td class="fixed-height">{{company.従業員一人当たりの売上}}万</td>
+                    </tr>
+                    <!-- 他の行も同様に追加可能 -->
+                </tbody>
+            </table>
+           
+        </div>
+    </div>
+
+
+    <!-- テーブル（安定性） -->
+<br> 
+    <div class="d-flex justify-content-center align-items-center" style="height: 20vh;">
+        <div class="mb-5 w-50">
+            <label for="" class="form-label font-type font-size-fami">財務基盤指標</label>
+            
+            <!-- テーブル -->
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th scope="col" class="fixed-width">有形固定資産</th>
+                        <th scope="col" class="fixed-width">固定負債</th>
+                        <th scope="col" class="fixed-width">自己資本比率</th>     
+                        <th scope="col" class="fixed-width">流動比率</th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="fixed-height">{{company.有形固定資産}}%</td>
+                        <td class="fixed-height">{{company.固定負債}}%</td>
+                        <td class="fixed-height">{{company.自己資本比率}}%</td>
+                        <td class="fixed-height">{{company.流動比率}}%</td>
+                    </tr>
+                    <!-- 他の行も同様に追加可能 -->
+                </tbody>
+            </table>
+           
+        </div>
+    </div>
+    <!-- テーブル（バリュエーション） -->
+
+    <br>
+    <div class="d-flex justify-content-center align-items-center" style="height: 20vh;">
+        <div class="mb-5 w-50">
+            <label for="" class="form-label font-type font-size-fami">バリュエーション指標</label>
+            
+            <!-- テーブル -->
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th scope="col" class="fixed-width">PER</th>
+                        <th scope="col" class="fixed-width">PBR</th>    
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="fixed-height">{{company.per}}%</td>
+                        <td class="fixed-height">{{company.pbr}}%</td>
+                    </tr>
+                    <!-- 他の行も同様に追加可能 -->
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+   
+
+    <!-- テーブル（人的資本） -->
+
+    <br>
+    <div class="d-flex justify-content-center align-items-center" style="height: 20vh;">
+        <div class="mb-5 w-50">
+            <label for="" class="form-label font-type font-size-fami">人的資本</label>
+            
+            <!-- テーブル -->
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th scope="col" class="fixed-width">平均年齢</th>
+                        <th scope="col" class="fixed-width">平均年収</th>
+                        <th scope="col" class="fixed-width">勤続年数</th>     
+                        <th scope="col" class="fixed-width">従業員数</th> 
+                        <th scope="col" class="fixed-width">人件費/純利益</th> 
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="fixed-height">{{company.平均年齢}}歳</td>
+                        <td class="fixed-height">{{company.平均年収}}万</td>
+                        <td class="fixed-height">{{company.勤続年数}}年</td>
+                        <td class="fixed-height">{{company.従業員数}}人</td>
+                        <td class="fixed-height">{{company.人件費_純利益}}%</td>
+                    </tr>
+                    <!-- 他の行も同様に追加可能 -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <br>
+    <div class="d-flex justify-content-center align-items-center" style="height: 20vh;">
+        <div class="mb-5 w-50">
+            <label for="" class="form-label font-type font-size-fami">その他</label>
+            
+            <!-- テーブル -->
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th scope="col" class="fixed-width">上場年数</th>
+                        <th scope="col" class="fixed-width">研究開発売上比率</th>    
+                        <th scope="col" class="fixed-width">取締役報酬</th> 
+                        <th scope="col" class="fixed-width">株価上昇率</th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="fixed-height">{{company.上場年数}}年</td>
+                        <td class="fixed-height">{{company.研究開発売上比率}}%</td>
+                        <td class="fixed-height">{{company.取締役報酬}}万</td>
+                        <td class="fixed-height">{{company.株価上昇率}}%</td>
+                    </tr>
+                    <!-- 他の行も同様に追加可能 -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- その他情報 -->
+
+
+  
+
+{% endblock %}

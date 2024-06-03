@@ -1,0 +1,34 @@
+{% extends 'company/base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>顧客の詳細情報</title>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>顧客の詳細情報</h1>
+        {% if customer %}
+            <div class="card">
+                <div class="card-body">
+                    <p><strong>ID:</strong> {{ customer.id }}</p>
+                    <p><strong>財務（ドル建て）:</strong> {{ customer.outstanding_debt }}</p>
+                    <p><strong>平均滞納日数:</strong> {{ customer.delay_from_due_date }}</p>
+                    <p><strong>平均滞納回数:</strong> {{ customer.num_of_delayed_payment }}</p>
+                    <p><strong>クレカの利息:</strong> {{ customer.interest_rate }}</p>
+                    <p><strong>保有口座数:</strong> {{ customer.num_bank_accounts }}</p>
+                    <p><strong>ローンの数:</strong> {{ customer.num_of_loan }}</p>
+                    <p><strong>クレジットスコア:</strong> {{ customer.credit_score }}</p>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-danger" role="alert">
+                顧客情報が見つかりませんでした。
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+{% endblock %}

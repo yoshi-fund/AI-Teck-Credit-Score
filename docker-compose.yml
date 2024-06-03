@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+      - /Users/anaiyoshikazu/real_data/Mirai-joblib:/app/data  # ホストのディレクトリをコンテナ内の特定の場所にマウント
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: real_fututer
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # データベースのデータを永続化
+
+volumes:
+  postgres_data:  # ボリュームを定義してデータベースのデータを永続化

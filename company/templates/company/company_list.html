@@ -1,0 +1,160 @@
+{% extends 'company/base.html' %}
+
+{% block content %}
+
+<!-- 内部スタイル -->
+<style>
+    .custom-shadow {
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* 影の設定 */
+    }
+    .custom-dropdown {
+        margin-right: 10px; /* 右のマージンを追加 */
+        width: 150px; /* 幅を150pxに設定 */
+    }
+    .custom-font {
+        font-size: 20px;
+        color: rgb(23, 61, 108);
+    }
+    
+    .custom-sidebar .list-group-item:hover {
+        background-color: #f8f9fa;
+        color:darkcyan;
+    }
+    .custom-sidebar .list-group-item.active {
+        background-color: rgba(0, 0, 0, 0.2); /* 選択された項目の背景色 */
+        color: black; /* 選択された項目の文字色 */
+    }
+
+    .custom-sidebar .list-group-item {
+        padding-top: 20px; /* 上のパディングを増やす */
+        padding-bottom: 20px; /* 下のパディングを増やす */
+    }
+</style>
+
+
+
+<!-- 検索フォーム -->
+<br>
+<div class="container">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-5">  
+            <form action="" method="get" class="d-flex">
+                <input name="query" type="text" placeholder="会社名" class="form-control me-2"/>
+                <button type="submit" class="btn btn-outline-secondary">検索</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- サイドバーとメインコンテンツのレイアウト -->
+<div class="container">
+    <div class="row">
+        <!-- サイドバーのセクション -->
+       <div class="col-md-2">
+    <!-- Bootstrapのcardクラスを使用したサイドバーのコンテナ -->
+    <div class="card text-center custom-sidebar custom-font position-fixed">
+        <div class="card-header">
+            絞り込み項目
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <a class="nav-link {% if request.GET.ordering == '平均年齢' %}active{% endif %}" href="?ordering=平均年齢">平均年齢</a>
+            </li>
+            <li class="list-group-item">
+                <a class="nav-link {% if request.GET.ordering == '平均年収' %}active{% endif %}" href="?ordering=平均年収">平均年収</a>
+            </li>
+            <li class="list-group-item">
+                <a class="nav-link {% if request.GET.ordering == '勤続年数' %}active{% endif %}" href="?ordering=勤続年数">勤続年数</a>
+            </li>
+            <li class="list-group-item">
+                <a class="nav-link {% if request.GET.ordering == '売上高' %}active{% endif %}" href="?ordering=売上高">売上高</a>
+            </li>
+            <li class="list-group-item">
+                <a class="nav-link {% if request.GET.ordering == '株価上昇率' %}active{% endif %}" href="?ordering=株価上昇率">株価上昇率</a>
+            </li>
+            <!-- 他のリンクはここに追加 -->
+        </ul>
+    </div>
+</div>
+
+        
+        <!-- メインコンテンツのセクション -->
+                <div class="col-md-10">
+                    <div class="main-content">
+                        <!-- ドロップダウンメニュー -->
+                        <form action="" method="get" class="d-flex justify-content-end">
+                            <input type="hidden" name="ordering" value="{{ request.GET.ordering|default:'売上高' }}">
+                            <select name="order_direction" class="form-select custom-dropdown" onchange="this.form.submit()">
+                                <option value="desc" {% if request.GET.order_direction == "desc" %} selected {% endif %}>高い順</option>
+                                <option value="asc" {% if request.GET.order_direction == "asc" %} selected {% endif %}>低い順</option>
+                            </select>
+                        </form>
+
+                        <br>
+
+                        <!-- 企業情報のカード -->
+                        {% for company in object_list %}
+                        <div class="row mb-5">
+                            <div class="col-md-10 d-flex justify-content-center">
+                                <div class="card text-center custom-shadow mx-auto" style="width: 25rem;">
+                                    {% if company.会社ロゴ %}
+                                        <img src="{{ company.会社ロゴ.url }}" alt="{{ company.会社名 }}" class="card-img-top">
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <h5 class="card-header link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
+                                            <a href="{% url 'company:detail' company.pk %}">{{ company.会社名 }}</a>
+                                        </h5>
+                                        <br>
+                                        <p class="card-text">業種: {{ company.get_industry_display }}</p>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">{{ company.事業内容 | linebreaks }}</li>
+                                            <li class="list-group-item">平均年齢 : {{ company.平均年齢 }}歳</li>
+                                            <li class="list-group-item">平均年収 : {{ company.平均年収 }}万</li>
+                                            <li class="list-group-item">勤続年数 : {{ company.勤続年数 }}年</li>
+                                            <li class="list-group-item">勤続年数 : {{ company.上場年数 }}年</li>
+                                            <li class="list-group-item">取締役報酬 : {{ company.取締役報酬 }}万</li>
+                                            <li class="list-group-item">売上高成長率３年平均 : {{ company.売上高 }}%</li>
+                                            <li class="list-group-item">株価上昇率<small>(2020年1月〜2023年12月)</small> : {{ company.株価上昇率 }}%</li>
+                                            <li class="list-group-item">クラスター : <mark>{{ company.get_cluster_display }}</mark></li>
+                                            <li class="list-group-item">主要な保有銘柄 : {{ company.持ち株 }}</li>
+                                        </ul>
+                                        </mark>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+
+<script>
+    function getQueryParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, '\\$&');
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var currentOrdering = getQueryParameterByName('ordering');
+        document.querySelectorAll('.custom-sidebar .nav-link').forEach(function(link) {
+            var linkOrdering = getQueryParameterByName('ordering', link.href);
+            if (currentOrdering === linkOrdering) {
+                link.parentElement.classList.add('active'); 
+            }
+        });
+    });
+</script>
+
+
+{% endblock %}
+
+
+
